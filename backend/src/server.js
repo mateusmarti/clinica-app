@@ -1,25 +1,19 @@
-import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import authRoutes from './routes/authRoutes.js'
-import consultaRoutes from './routes/consultaRoutes.js'
-import cepRoutes from './routes/cepRoutes.js'
-import climaRoutes from './routes/climaRoutes.js'
+import app from './app.js'
+import { connectDB } from './config/db.js'
 
-dotenv.config()
+const PORT = process.env.PORT || 3000
 
-const app = express()
+const startServer = async () => {
+  try {
+    await connectDB()
 
-app.use(cors())
-app.use(express.json())
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`)
+    })
+  } catch (error) {
+    console.error('Erro ao iniciar servidor:', error.message)
+    process.exit(1)
+  }
+}
 
-app.use('/api/auth', authRoutes)
-app.use('/api/consultas', consultaRoutes)
-app.use('/api/cep', cepRoutes)
-app.use('/api/clima', climaRoutes)
-
-app.get('/', (req, res) => {
-  res.send('API rodando 🚀')
-})
-
-export default app
+startServer()
