@@ -48,10 +48,10 @@ O sistema permite que pacientes e secretários realizem login, agendem consultas
 
 ## Estrutura do projeto
 clinica-app/
-├── backend/
-├── frontend/
-├── README.md
-└── .gitignore
+- ├── backend/
+- ├── frontend/
+- ├── README.md
+- └── .gitignore
 
 
 ---
@@ -88,9 +88,9 @@ clinica-app/
 ## Como executar o projeto
 
 ### Backend
-cd backend
-npm install
-npm run dev
+- cd backend
+- npm install
+- npm run dev
 
 
 Servidor rodando em:
@@ -100,9 +100,9 @@ http://localhost:3000
 ---
 
 ### Frontend
-cd frontend
-npm install
-npm run dev
+- cd frontend
+- npm install
+- npm run dev
 
 
 Aplicação rodando em:
@@ -113,14 +113,14 @@ http://localhost:5173
 
 ## Variáveis de ambiente
 
-Criar um arquivo `.env` dentro da pasta backend:
-MONGO_URI=sua_string_do_mongodb
-JWT_SECRET=seu_segredo
+- Criar um arquivo `.env` dentro da pasta backend:
+- MONGO_URI=sua_string_do_mongodb
+- JWT_SECRET=seu_segredo
 
 Exemplo:
 
-MONGO_URI=mongodb+srv://usuario:senha@cluster.mongodb.net/
-JWT_SECRET=segredo123
+- MONGO_URI=mongodb+srv://usuario:senha@cluster.mongodb.net/
+- JWT_SECRET=segredo123
 
 
 ---
@@ -128,21 +128,21 @@ JWT_SECRET=segredo123
 ## Rotas principais da API
 
 ### Auth
-POST /api/auth/register
-POST /api/auth/login
+- POST /api/auth/register
+- POST /api/auth/login
 
 
 ### Consultas
-GET /api/consultas
-POST /api/consultas
+- GET /api/consultas
+- POST /api/consultas
 
 
 ### CEP
-GET /api/cep/:cep
+- GET /api/cep/:cep
 
 
 ### Clima
-GET /api/clima/:cidade
+- GET /api/clima/:cidade
 
 
 ---
