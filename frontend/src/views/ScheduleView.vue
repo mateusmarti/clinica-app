@@ -115,6 +115,7 @@
                   </div>
                 </div>
               </form>
+              
             </div>
           </div>
         </div>
@@ -165,7 +166,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import api from '../services/api'
 
 const loading = ref(false)
@@ -182,6 +183,12 @@ const form = reactive({
   cidade: '',
   estado: '',
   descricao: ''
+})
+
+watch(() => form.data, async (novaData) => {
+  if (novaData && form.cidade) {
+    await buscarClima()
+  }
 })
 
 const buscarEndereco = async () => {
@@ -207,16 +214,36 @@ const buscarEndereco = async () => {
 
 const buscarClima = async () => {
   try {
-    if (!form.cidade) return
+    if (!form.cidade || !form.data) {
+      climaMensagem.value = 'Selecione a data da consulta para verificar a previsão do tempo.'
+      return
+    }
 
     const response = await api.get(`/clima/${form.cidade}`)
     const dados = response.data?.dados
 
-    if (dados?.weathercode?.length) {
-      climaMensagem.value =
-        'Previsão carregada com sucesso. Verifique a possibilidade de chuva no dia da consulta.'
-    } else {
+    if (!dados?.time?.length || !dados?.weathercode?.length) {
       climaMensagem.value = 'Não foi possível interpretar a previsão do clima.'
+      return
+    }
+
+    const indiceData = dados.time.findIndex((data) => data === form.data)
+
+    if (indiceData === -1) {
+      climaMensagem.value = 'Não há previsão disponível para a data informada.'
+      return
+    }
+
+    const weatherCode = dados.weathercode[indiceData]
+
+    const codigosDeChuva = [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99]
+
+    const vaiChover = codigosDeChuva.includes(weatherCode)
+
+    if (vaiChover) {
+      climaMensagem.value = `Há previsão de chuva em ${form.cidade} no dia ${form.data}.`
+    } else {
+      climaMensagem.value = `Não há previsão de chuva em ${form.cidade} no dia ${form.data}.`
     }
   } catch (err) {
     climaMensagem.value = 'Não foi possível obter a previsão do tempo.'
