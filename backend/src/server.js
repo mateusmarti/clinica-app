@@ -1,20 +1,25 @@
-import app from './app.js';
-import { connectDB } from './config/db.js';
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import authRoutes from './routes/authRoutes.js'
+import consultaRoutes from './routes/consultaRoutes.js'
+import cepRoutes from './routes/cepRoutes.js'
+import climaRoutes from './routes/climaRoutes.js'
 
-const PORT = 3000;
+dotenv.config()
 
-// 👇 ISSO AQUI É O QUE FALTAVA
-connectDB();
+const app = express()
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
-import consultaRoutes from './routes/consultaRoutes.js';
+app.use(cors())
+app.use(express.json())
 
-app.use('/api/consultas', consultaRoutes);
-import cepRoutes from './routes/cepRoutes.js';
+app.use('/api/auth', authRoutes)
+app.use('/api/consultas', consultaRoutes)
+app.use('/api/cep', cepRoutes)
+app.use('/api/clima', climaRoutes)
 
-app.use('/api/cep', cepRoutes);
-import climaRoutes from './routes/climaRoutes.js';
+app.get('/', (req, res) => {
+  res.send('API rodando 🚀')
+})
 
-app.use('/api/clima', climaRoutes);
+export default app
